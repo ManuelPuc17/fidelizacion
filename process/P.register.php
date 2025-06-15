@@ -19,7 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES ('$telefono', '$nombre', '$apellidos', '$direccion', '$correo', '$estado', '$ciudad', '$hash')";
 
     if ($mysqli->query($sql) === TRUE) {
-        $mensaje = "<div class='alert alert-success'>Registro exitoso. <a href='login.php'>Inicia sesión</a></div>";
+        $mensaje = "<div class='alert alert-success'>Cliente registrado exitosamente.</div>";
+        // Redirigir a la página de inicio de sesión o a otra página
+        header('Location: ../view/V.login.php');
+        exit();
     } else {
         $mensaje = "<div class='alert alert-danger'>Error: " . $mysqli->error . "</div>";
     }
