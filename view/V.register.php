@@ -9,7 +9,9 @@
 <body class="bg-light">
     <div class="container mt-5" style="max-width: 500px;">
         <h2 class="mb-4 text-center">Registro de Cliente</h2>
-        <?php echo $mensaje; ?>
+        <?php if (!empty($mensaje)): ?>
+            <div class="alert alert-info"><?= htmlspecialchars($mensaje) ?></div>
+        <?php endif; ?>
         <form method="POST" action="../process/P.register.php" class="bg-white p-4 rounded shadow">
             <div class="mb-3">
                 <label for="telefono" class="form-label">Teléfono *</label>
@@ -46,7 +48,7 @@
             <button type="submit" class="btn btn-primary w-100">Registrarse</button>
         </form>
         <p class="text-center mt-3">
-            ¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a>
+            ¿Ya tienes cuenta? <a href="V.login.php">Inicia sesión</a>
         </p>
     </div>
 </body>

@@ -12,7 +12,7 @@
         <?php if (!empty($mensaje)): ?>
             <div class="alert alert-info"><?= htmlspecialchars($mensaje) ?></div>
         <?php endif; ?>
-        <form method="POST" action="login.php" class="bg-white p-4 rounded shadow">
+        <form method="POST" action="../process/P.login.php" class="bg-white p-4 rounded shadow">
             <div class="mb-3">
                 <label for="telefono" class="form-label">Teléfono</label>
                 <input type="text" class="form-control" id="telefono" name="telefono" required />
@@ -24,7 +24,7 @@
             <button type="submit" class="btn btn-success w-100">Entrar</button>
         </form>
         <p class="text-center mt-3">
-            ¿No tienes cuenta? <a href="registro.php">Regístrate</a>
+            ¿No tienes cuenta? <a href="V.register.php">Regístrate</a>
         </p>
     </div>
 </body>
