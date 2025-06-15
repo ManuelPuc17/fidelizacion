@@ -9,7 +9,9 @@
 <body class="bg-light">
     <div class="container mt-5" style="max-width: 400px;">
         <h2 class="mb-4 text-center">Iniciar Sesión</h2>
-        <?php echo $mensaje; ?>
+        <?php if (!empty($mensaje)): ?>
+            <div class="alert alert-info"><?= htmlspecialchars($mensaje) ?></div>
+        <?php endif; ?>
         <form method="POST" action="login.php" class="bg-white p-4 rounded shadow">
             <div class="mb-3">
                 <label for="telefono" class="form-label">Teléfono</label>
