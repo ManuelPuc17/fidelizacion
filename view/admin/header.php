@@ -32,7 +32,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'admin') {
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="dashboard.php">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="premios.php">Premios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ventas.php">Ventas</a></li>
                 </ul>
                 <span class="navbar-text text-white me-3">
                     Bienvenido, <?= htmlspecialchars($_SESSION['usuario_nombre']) ?>
