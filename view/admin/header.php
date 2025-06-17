@@ -33,11 +33,12 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'admin') {
                     <li class="nav-item"><a class="nav-link" href="dashboard.php">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="premios.php">Premios</a></li>
                     <li class="nav-item"><a class="nav-link" href="ventas.php">Ventas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="clientes.php">Clientes</a></li>
                 </ul>
                 <span class="navbar-text text-white me-3">
                     Bienvenido, <?= htmlspecialchars($_SESSION['usuario_nombre']) ?>
                 </span>
-                <a class="btn btn-outline-light" href="../../logout.php">Cerrar sesión</a>
+                <a class="btn btn-outline-light" href="../../process/P.logout.php">Cerrar sesión</a>
             </div>
         </div>
     </nav>

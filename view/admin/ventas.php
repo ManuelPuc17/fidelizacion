@@ -5,7 +5,7 @@ include '../../conexion.php';
 // Obtener lista de clientes para el select
 $clientes = $mysqli->query("SELECT id, nombre FROM clientes ORDER BY nombre");
 
-// Procesar el formulario de registro de venta
+// Procsar el formulario de registro de venta
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cliente_id = $_POST['cliente_id'];
     $monto = floatval($_POST['monto']);
@@ -17,13 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
     $stmt->close();
 
-    // Acumular puntos al cliente (asegúrate que exista la columna `puntos` en la tabla clientes)
+    // sumar puntos al cliente 
     $mysqli->query("UPDATE clientes SET puntos = puntos + $puntos WHERE id = $cliente_id");
 
     echo "<div class='alert alert-success'>Venta registrada. Se añadieron $puntos puntos al cliente.</div>";
 }
 
-// Consultar historial de ventas junto con el nombre del cliente
+// consultar historial de ventas junto con el nombre del cliente
 $ventas = $mysqli->query("
     SELECT v.*, c.nombre 
     FROM ventas v 
