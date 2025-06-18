@@ -23,9 +23,6 @@
             </div>
             <button type="submit" class="btn btn-success w-100">Entrar</button>
         </form>
-        <p class="text-center mt-3">
-            ¿No tienes cuenta? <a href="V.register.php">Regístrate</a>
-        </p>
     </div>
 </body>
 </html>
