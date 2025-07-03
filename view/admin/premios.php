@@ -1,8 +1,12 @@
 <?php 
 include 'header.php'; 
-include '../../conexion.php';
 
-$premios = $mysqli->query("SELECT * FROM premios ORDER BY nombre");
+//  Llamar a la API
+$premios_json = file_get_contents('http://localhost/apirest/premios');
+$premios = json_decode($premios_json, true);
+
+// Acumulador para los modales de edición
+$modalesEditar = '';
 ?>
 
 <h2 class="mb-4">Premios Disponibles</h2>
@@ -21,23 +25,18 @@ $premios = $mysqli->query("SELECT * FROM premios ORDER BY nombre");
         </tr>
     </thead>
     <tbody>
-        <?php
-        $modalesEditar = '';
-        while ($premio = $premios->fetch_assoc()):
-        ?>
+        <?php foreach ($premios as $premio): ?>
         <tr>
             <td><?= htmlspecialchars($premio['nombre']) ?></td>
             <td><?= htmlspecialchars($premio['descripcion']) ?></td>
             <td><?= htmlspecialchars($premio['puntos_necesarios']) ?></td>
             <td>
-                <!-- Botón para editar -->
                 <button class="btn btn-sm btn-warning"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalEditar<?= $premio['id'] ?>">
-                    Editar
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalEditar<?= $premio['id'] ?>">
+                        Editar
                 </button>
 
-                <!-- Botón para eliminar -->
                 <a href="../../process/premio_delete.php?id=<?= $premio['id'] ?>" 
                    class="btn btn-sm btn-danger"
                    onclick="return confirm('¿Eliminar este premio?')">
@@ -47,7 +46,6 @@ $premios = $mysqli->query("SELECT * FROM premios ORDER BY nombre");
         </tr>
 
         <?php
-        // Guardamos el modal de edición para mostrarlo fuera del <table>
         $modalesEditar .= '
         <div class="modal fade" id="modalEditar' . $premio['id'] . '" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -58,7 +56,6 @@ $premios = $mysqli->query("SELECT * FROM premios ORDER BY nombre");
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" value="' . $premio['id'] . '">
-
                         <div class="mb-3">
                             <label class="form-label">Nombre</label>
                             <input type="text" name="nombre" class="form-control" required value="' . htmlspecialchars($premio['nombre']) . '">
@@ -79,12 +76,12 @@ $premios = $mysqli->query("SELECT * FROM premios ORDER BY nombre");
                 </form>
             </div>
         </div>';
-        endwhile;
         ?>
+        <?php endforeach; ?>
     </tbody>
 </table>
 
-<!-- Mostrar los modales de edición fuera de la tabla -->
+<!-- Mostrar los modales de edición -->
 <?= $modalesEditar ?>
 
 <!-- Modal de agregar -->

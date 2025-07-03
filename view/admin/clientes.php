@@ -1,8 +1,9 @@
 <?php 
 include 'header.php'; 
-include '../../conexion.php';
 
-$clientes = $mysqli->query("SELECT * FROM clientes ORDER BY nombre");
+// Consumir API REST en lugar de usar mysqli
+$clientes_json = file_get_contents('http://localhost/apirest/clientes');
+$clientes = json_decode($clientes_json, true);
 ?>
 
 <h2 class="mb-4">Clientes registrados</h2>
@@ -23,7 +24,7 @@ $clientes = $mysqli->query("SELECT * FROM clientes ORDER BY nombre");
         </tr>
     </thead>
     <tbody>
-        <?php while ($cliente = $clientes->fetch_assoc()): ?>
+        <?php foreach ($clientes as $cliente): ?>
             <tr>
                 <td><?= htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']) ?></td>
                 <td><?= htmlspecialchars($cliente['telefono']) ?></td>
@@ -35,7 +36,7 @@ $clientes = $mysqli->query("SELECT * FROM clientes ORDER BY nombre");
                     <a href="../../process/cliente_delete.php?id=<?= $cliente['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este cliente?')">Eliminar</a>
                 </td>
             </tr>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
     </tbody>
 </table>
 
@@ -100,10 +101,7 @@ $clientes = $mysqli->query("SELECT * FROM clientes ORDER BY nombre");
 </div>
 
 <!-- Modales de edición FUERA del tbody -->
-<?php
-$clientes->data_seek(0); // Reiniciar puntero
-while ($cliente = $clientes->fetch_assoc()):
-?>
+<?php foreach ($clientes as $cliente): ?>
 <div class="modal fade" id="modalEditar<?= $cliente['id'] ?>" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <form action="../../process/cliente_update.php" method="POST" class="modal-content">
@@ -158,6 +156,6 @@ while ($cliente = $clientes->fetch_assoc()):
     </form>
   </div>
 </div>
-<?php endwhile; ?>
+<?php endforeach; ?>
 
 <?php include 'footer.php'; ?>

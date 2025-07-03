@@ -1,40 +1,46 @@
 <?php
 session_start();
-include '../conexion.php';
 
-// Verifica si el usuario es cliente
-if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'cliente') {
-    header('Location: ../view/V.login.php');
-    exit();
+if (!isset($_SESSION['usuario_id'])) {
+    die("No autenticado");
 }
 
-$cliente_id = $_SESSION['usuario_id'];
-$premio_id = isset($_POST['premio_id']) ? intval($_POST['premio_id']) : 0;
+$premio_id = $_POST['premio_id'] ?? null;
+$puntos_necesarios = $_POST['puntos_necesarios'] ?? null;
+$cliente_id = $_SESSION['usuario_id']; // toma de sesión para seguridad
 
-// Obtener información del premio
-$premio = $mysqli->query("SELECT puntos_necesarios FROM premios WHERE id = $premio_id")->fetch_assoc();
-
-if (!$premio) {
-    die("Premio no encontrado.");
+if (!$premio_id || !$puntos_necesarios) {
+    die("Faltan datos para realizar el canje.");
 }
 
-// Obtener puntos actuales del cliente
-$cliente = $mysqli->query("SELECT puntos FROM clientes WHERE id = $cliente_id")->fetch_assoc();
+// Datos que envías a la API
+$data = [
+    'cliente_id' => $cliente_id,
+    'premio_id' => $premio_id,
+    'puntos' => $puntos_necesarios,
+];
 
-if ($cliente['puntos'] < $premio['puntos_necesarios']) {
-    die("No tienes suficientes puntos para este premio.");
+$options = [
+    'http' => [
+        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+        'method'  => 'POST',
+        'content' => http_build_query($data),
+    ],
+];
+
+$context = stream_context_create($options);
+$response = @file_get_contents('http://localhost/apirest/canjeos', false, $context);
+
+if ($response === FALSE) {
+    $error = error_get_last();
+    die("Error al realizar el canje: " . ($error['message'] ?? 'Error desconocido'));
 }
 
-// Descontar puntos al cliente
-$nuevos_puntos = $cliente['puntos'] - $premio['puntos_necesarios'];
-$mysqli->query("UPDATE clientes SET puntos = $nuevos_puntos WHERE id = $cliente_id");
+// Si quieres puedes decodificar y validar la respuesta JSON de la API
+$resultado = json_decode($response, true);
+if (isset($resultado['message'])) {
+    echo "Respuesta API: " . htmlspecialchars($resultado['message']);
+}
 
-// Registrar canje
-$stmt = $mysqli->prepare("INSERT INTO canjeos (cliente_id, premio_id) VALUES (?, ?)");
-$stmt->bind_param("ii", $cliente_id, $premio_id);
-$stmt->execute();
-$stmt->close();
-
-// Redirigir con mensaje (puedes adaptar según tu sistema de notificaciones)
-header("Location: ../view/cliente/C.premios.php?success=1");
-exit();
+header("Location: ../view/cliente/C.premios.php");
+exit;

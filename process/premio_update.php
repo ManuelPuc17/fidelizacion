@@ -1,21 +1,32 @@
 <?php
-include '../conexion.php';
+// premio_update.php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = intval($_POST['id']);
-    $nombre = $mysqli->real_escape_string($_POST['nombre']);
-    $descripcion = $mysqli->real_escape_string($_POST['descripcion']);
-    $puntos = intval($_POST['puntos_necesarios']);
+$id = $_POST['id'];
+$nombre = $_POST['nombre'];
+$descripcion = $_POST['descripcion'];
+$puntos = $_POST['puntos_necesarios'];
 
-    $sql = "UPDATE premios 
-            SET nombre = '$nombre', descripcion = '$descripcion', puntos_necesarios = $puntos 
-            WHERE id = $id";
 
-    if ($mysqli->query($sql)) {
-        header('Location: ../view/admin/premios.php');
-        exit();
-    } else {
-        echo "Error al actualizar: " . $mysqli->error;
-    }
+$data = [
+    'nombre'            => $nombre,
+    'descripcion'       => $descripcion,
+    'puntos_necesarios' => $puntos,
+];
+
+$options = [
+    'http' => [
+        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+        'method'  => 'POST', // Asumimos que usas POST para editar
+        'content' => http_build_query($data),
+    ],
+];
+
+$context = stream_context_create($options);
+$response = file_get_contents("http://localhost/apirest/premios/editar/$id", false, $context);
+
+if ($response === false) {
+    die('Error al actualizar el premio usando la API.');
 }
-?>
+
+header('Location: ../view/admin/premios.php');
+exit;
