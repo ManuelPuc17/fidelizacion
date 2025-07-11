@@ -1,6 +1,4 @@
 <?php
-// cliente_update.php
-
 $id         = $_POST['id'];
 $nombre     = $_POST['nombre'];
 $apellidos  = $_POST['apellidos'];
@@ -12,7 +10,6 @@ $ciudad     = $_POST['ciudad'];
 $rol        = $_POST['rol'];
 $contrasena = $_POST['contrasena'] ?? '';
 
-// Preparamos los datos a enviar
 $data = [
     'nombre'     => $nombre,
     'apellidos'  => $apellidos,
@@ -24,18 +21,15 @@ $data = [
     'rol'        => $rol,
 ];
 
-// Solo enviamos la contraseña si no está vacía
 if (!empty($contrasena)) {
     $data['contrasena'] = $contrasena;
 }
 
-// URL de la API para editar cliente
 $apiUrl = "http://localhost/apirest/clientes/editar/$id";
 
-// Usamos cURL
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true); // Leaf acepta POST aunque sea "editar"
+curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
 
@@ -49,6 +43,5 @@ if ($response === false) {
 
 curl_close($ch);
 
-// Redirigir después de guardar
 header("Location: ../view/admin/clientes.php");
 exit;

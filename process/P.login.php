@@ -17,14 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Guardar datos en sesión
             $_SESSION['usuario_id'] = $cliente['id'];
             $_SESSION['usuario_nombre'] = $cliente['nombre'];
-            $_SESSION['usuario_rol'] = $cliente['rol']; // puede ser 'admin' o 'cliente'
+            $_SESSION['usuario_rol'] = $cliente['rol']; // 'admin' o 'cliente'
 
-            // Redirigir según el rol
-            if ($cliente['rol'] === 'admin') {
-                header('Location: ../view/admin/dashboard.php');
-            } else {
-                header('Location: ../view/cliente/dashboard.php');
-            }
+            // Señalamos que falta verificación por voz
+            $_SESSION['verificacion_voz_pendiente'] = true;
+
+            // Redirigir a la verificación por voz
+            header('Location: ../view/verificacion-voz.php');
             exit();
         } else {
             $mensaje = "<div class='alert alert-danger'>Contraseña incorrecta</div>";

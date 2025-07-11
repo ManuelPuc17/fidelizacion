@@ -1,5 +1,4 @@
 <?php
-// cliente_insert.php
 $nombre = $_POST['nombre'];
 $apellidos = $_POST['apellidos'];
 $telefono = $_POST['telefono'];
