@@ -67,3 +67,26 @@ $compras = json_decode($compras_json, true);
         </tbody>
     </table>
 </div>
+<?php
+$cliente_nombre = $cliente['nombre'];
+?>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // Pedimos permiso si no está concedido
+  if (Notification.permission === 'default') {
+    await Notification.requestPermission();
+  }
+
+  // Mostramos la notificación solo si el usuario la permitió
+  if (Notification.permission === 'granted') {
+    new Notification("¡Bienvenido!", {
+      body: "Hola <?= addslashes($cliente_nombre) ?>, disfruta tu sesión y revisa tus puntos.",
+      icon: "../../icons/tienda-online.png",
+      badge: "../../icons/tienda-online.png"
+    });
+    console.info("Notificación de bienvenida mostrada");
+  } else {
+    console.info("Permiso de notificaciones denegado o ignorado");
+  }
+});
+</script>
