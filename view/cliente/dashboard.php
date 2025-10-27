@@ -84,9 +84,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       icon: "../../icons/tienda-online.png",
       badge: "../../icons/tienda-online.png"
     });
-    console.info("Notificación de bienvenida mostrada");
+    
+  } 
+    // Badging API: muestra el número de puntos nuevos
+  if ('setAppBadge' in navigator) {
+    const puntosNuevos = <?= $cliente['puntos'] ?>; // ejemplo
+    navigator.setAppBadge(1);
+    console.info("Badge actualizado con puntos:", puntosNuevos);
   } else {
-    console.info("Permiso de notificaciones denegado o ignorado");
+    console.info("Badging API no soportada en este navegador");
   }
 });
+
 </script>
